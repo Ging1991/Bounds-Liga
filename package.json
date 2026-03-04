@@ -1,0 +1,13 @@
+{
+	"name": "com.bounds.modulos.liga",
+	"version": "1.0.0",
+	"displayName": "Bounds - Liga",
+	"description": "Librería base para soportar otras liberías que he creado.",
+	"unity": "2022.3",
+	"keywords": ["soporte",	"unity", "tcg",	"util"],
+	"author": {
+		"name": "Carlos Caballero",
+		"email": "tu-email@ejemplo.com",
+		"url": "https://github.com/Ging1991/Unity-Core.git"
+	}
+}
