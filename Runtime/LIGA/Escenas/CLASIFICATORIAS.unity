@@ -1573,6 +1573,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicaDeFondo
       objectReference: {fileID: 0}
+    - target: {fileID: 6183328561325744873, guid: 3354e86cbae314844b4e16a766e16b3f, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9198515645138593896, guid: 3354e86cbae314844b4e16a766e16b3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
