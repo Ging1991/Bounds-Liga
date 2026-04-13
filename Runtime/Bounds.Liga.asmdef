@@ -9,6 +9,7 @@
         "Bounds.Duelo",
         "Bounds.Construccion",
         "Bounds.Visuales",
+        "Bounds.Entrenamiento",
         "Bounds.Persistencia",
         "Ging1991.Core",
 		"Ging1991.Musica",

@@ -1,10 +1,10 @@
+using Bounds.Entrenamiento;
 using Bounds.Infraestructura;
-using Bounds.Modulos.Persistencia;
 using Bounds.Musica;
 using Bounds.Persistencia;
 using Bounds.Persistencia.Parametros;
 using Bounds.Salesforce;
-using Ging1991.Interfaces.Contadores;
+using Ging1991.Interfaces.Salida;
 using Ging1991.Persistencia.Direcciones;
 using Ging1991.Salesforce;
 using UnityEngine;
@@ -25,8 +25,10 @@ namespace Bounds.Liga {
 
 		public Text nombreOBJ;
 		public Configuracion configuracion;
+		public PersonalizarUI personalizarUI;
 
 		void Start() {
+			personalizarUI.Personalizar();
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
@@ -46,8 +48,8 @@ namespace Bounds.Liga {
 				CuadroDivision cuadroDivision = GameObject.Find("CuadroDivision").GetComponent<CuadroDivision>();
 				cuadroDivision.SetDivision(puntuacion.division);
 
-				indicadorVictorias.GetComponent<ContadorSimbolo>().SetValor(Color.green, puntuacion.victorias, 5, 5);
-				indicadorDerrotas.GetComponent<ContadorSimbolo>().SetValor(Color.red, puntuacion.derrotas, 5, 5);
+				indicadorVictorias.GetComponent<Indicador>().SetValor(Color.green, puntuacion.victorias, 5, 5);
+				indicadorDerrotas.GetComponent<Indicador>().SetValor(Color.red, puntuacion.derrotas, 5, 5);
 
 				if (puntuacion.oponentes.Count > 0)
 					oponente1.GetComponentInChildren<Text>().text = puntuacion.oponentes[0];

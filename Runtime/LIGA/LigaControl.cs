@@ -12,6 +12,7 @@ using Bounds.Persistencia;
 using Bounds.Persistencia.Parametros;
 using Bounds.Modulos.Persistencia;
 using Bounds.Musica;
+using Bounds.Entrenamiento;
 
 namespace Bounds.Liga {
 
@@ -21,8 +22,10 @@ namespace Bounds.Liga {
 		public ParametrosControl parametrosControl;
 		public Configuracion configuracion;
 		public MusicaDeFondo musicaDeFondo;
+		public PersonalizarUI personalizarUI;
 
 		void Start() {
+			personalizarUI.Personalizar();
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
