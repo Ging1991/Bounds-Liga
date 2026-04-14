@@ -22,12 +22,12 @@ namespace Bounds.Liga {
 		public ParametrosControl parametrosControl;
 		public Configuracion configuracion;
 		public MusicaDeFondo musicaDeFondo;
-		public PersonalizarUI personalizarUI;
+		public ControlUIBounds personalizarUI;
 
 		void Start() {
-			personalizarUI.Personalizar();
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
+			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
 
 			configuracion = new(parametros.direcciones["CONFIGURACION"]);

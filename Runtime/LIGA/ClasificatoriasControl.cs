@@ -25,12 +25,12 @@ namespace Bounds.Liga {
 
 		public Text nombreOBJ;
 		public Configuracion configuracion;
-		public PersonalizarUI personalizarUI;
+		public ControlUIBounds personalizarUI;
 
 		void Start() {
-			personalizarUI.Personalizar();
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
+			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
 			configuracion = new(parametros.direcciones["CONFIGURACION"]);
 			nombreOBJ.text = $"Nombre: {configuracion.GetNombre()}";
