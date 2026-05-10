@@ -70,10 +70,7 @@ namespace Bounds.Liga {
 			Global.Mazo mazo1 = new MazoJugador(MazoJugador.GetPredeterminado());
 
 			MazoBD mazoBD = new MazoBD();
-			List<string> cartas = new List<string>();
-			foreach (var carta in oponente.cartas)
-				cartas.Add($"{carta}_A_N_1");
-			mazoBD.cartas = cartas;
+			mazoBD.cartas = oponente.cartas;
 			mazoBD.principalVacio = $"{oponente.vacio}_A_N_1";
 
 			Global.Mazo mazo2 = new MazoSF(mazoBD);
