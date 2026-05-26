@@ -2,17 +2,14 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using Bounds.Global.Mazos;
-using Bounds.Persistencia.Datos;
 using Bounds.Infraestructura;
 using Bounds.Salesforce;
 using Ging1991.Salesforce;
 using Ging1991.Persistencia.Direcciones;
 using Bounds.Persistencia;
 using Bounds.Persistencia.Parametros;
-using Bounds.Modulos.Persistencia;
 using Bounds.Musica;
-using Bounds.Entrenamiento;
+using Bounds.Mazos;
 
 namespace Bounds.Liga {
 
@@ -67,13 +64,13 @@ namespace Bounds.Liga {
 			parametros.jugadorMiniatura1 = "LAUNIX";
 			parametros.jugadorMiniatura2 = oponente.avatar;
 
-			Global.Mazo mazo1 = new MazoJugador(MazoJugador.GetPredeterminado());
+			Mazo mazo1 = new MazoJugador(MazoJugador.GetPredeterminado());
 
 			MazoBD mazoBD = new MazoBD();
 			mazoBD.cartas = oponente.cartas;
 			mazoBD.principalVacio = $"{oponente.vacio}_A_N_1";
 
-			Global.Mazo mazo2 = new MazoSF(mazoBD);
+			Mazo mazo2 = new MazoSF(mazoBD);
 
 			parametros.mazo1 = mazo1.cartas;
 			parametros.mazo2 = mazo2.cartas;
