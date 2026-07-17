@@ -1,11 +1,13 @@
-using Bounds.Entrenamiento;
 using Bounds.Infraestructura;
 using Bounds.Musica;
 using Bounds.Persistencia;
 using Bounds.Persistencia.Parametros;
 using Bounds.Salesforce;
+using Ging1991.Core.Interfaces;
 using Ging1991.Interfaces.Salida;
 using Ging1991.Persistencia.Direcciones;
+using Ging1991.Persistencia.Lectores;
+using Ging1991.Persistencia.Proveedores;
 using Ging1991.Salesforce;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,14 +28,17 @@ namespace Bounds.Liga {
 		public Text nombreOBJ;
 		public Configuracion configuracion;
 		public ControlUIBounds personalizarUI;
+		public CuadroDivision cuadroDivision;
+		private IProveedor<string, string> proveedorTexto;
 
 		void Start() {
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
+			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
 			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
 			configuracion = new(parametros.direcciones["CONFIGURACION"]);
-			nombreOBJ.text = $"Nombre: {configuracion.GetNombre()}";
+			nombreOBJ.text = proveedorTexto.GetElemento("JUGADOR X").Replace("[JUGADOR]", configuracion.GetNombre());
 			CargarDatos();
 		}
 
@@ -45,8 +50,7 @@ namespace Bounds.Liga {
 			if (await servicio.AutorizarAsincronico()) {
 				ServicioTraerDatosDeDivision.Puntuacion puntuacion = await servicio.LlamarAsincronica(configuracion.GetNombre());
 
-				CuadroDivision cuadroDivision = GameObject.Find("CuadroDivision").GetComponent<CuadroDivision>();
-				cuadroDivision.SetDivision(puntuacion.division);
+				cuadroDivision.SetDivision(puntuacion.division, proveedorTexto.GetElemento("DIVISION X").Replace("[DIVISION]", puntuacion.division));
 
 				indicadorVictorias.GetComponent<Indicador>().SetValor(Color.green, puntuacion.victorias, 5, 5);
 				indicadorDerrotas.GetComponent<Indicador>().SetValor(Color.red, puntuacion.derrotas, 5, 5);

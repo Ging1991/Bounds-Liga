@@ -10,6 +10,9 @@ using Bounds.Persistencia;
 using Bounds.Persistencia.Parametros;
 using Bounds.Musica;
 using Bounds.Mazos;
+using Ging1991.Core.Interfaces;
+using Ging1991.Persistencia.Proveedores;
+using Ging1991.Persistencia.Lectores;
 
 namespace Bounds.Liga {
 
@@ -20,10 +23,12 @@ namespace Bounds.Liga {
 		public Configuracion configuracion;
 		public MusicaDeFondo musicaDeFondo;
 		public ControlUIBounds personalizarUI;
+		private IProveedor<string, string> proveedorTexto;
 
 		void Start() {
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
+			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
 			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
 			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
 
@@ -39,9 +44,9 @@ namespace Bounds.Liga {
 			if (await api.AutorizarAsincronico()) {
 				oponente = await api.LlamarAsincronica(configuracion.GetNombre());
 				Text cartelTexto = GameObject.Find("Mensaje1").GetComponentInChildren<Text>();
-				cartelTexto.text = "Oponente: " + oponente.nombre;
+				cartelTexto.text = proveedorTexto.GetElemento("OPONENTE X").Replace("[OPONENTE]", oponente.nombre);
 				Text cartelTexto2 = GameObject.Find("Mensaje2").GetComponentInChildren<Text>();
-				cartelTexto2.text = "Mazo: " + oponente.nombreMazo;
+				cartelTexto2.text = proveedorTexto.GetElemento("MAZO X").Replace("[MAZO]", oponente.nombreMazo);
 
 			}
 			else {
