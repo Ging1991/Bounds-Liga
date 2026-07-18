@@ -13,6 +13,7 @@ using Bounds.Mazos;
 using Ging1991.Core.Interfaces;
 using Ging1991.Persistencia.Proveedores;
 using Ging1991.Persistencia.Lectores;
+using Ging1991.Musica;
 
 namespace Bounds.Liga {
 
@@ -21,16 +22,24 @@ namespace Bounds.Liga {
 		private ServicioEncontrarOponente.Oponente oponente;
 		public ParametrosControl parametrosControl;
 		public Configuracion configuracion;
-		public MusicaDeFondo musicaDeFondo;
 		public ControlUIBounds personalizarUI;
 		private IProveedor<string, string> proveedorTexto;
+
+		private void InicializarMusica(string direccion) {
+			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
+			if (musicaAmbiental.actual != "GENERAL") {
+				musicaAmbiental.Inicializar(new ProveedorAudios(new DireccionRecursos(direccion)));
+				musicaAmbiental.Reproducir("GENERAL");
+			}
+		}
+
 
 		void Start() {
 			parametrosControl.Inicializar();
 			ParametrosEscena parametros = parametrosControl.parametros;
 			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
 			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
-			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
+			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
 
 			configuracion = new(parametros.direcciones["CONFIGURACION"]);
 			CargarOponente();

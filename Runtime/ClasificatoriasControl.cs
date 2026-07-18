@@ -5,6 +5,7 @@ using Bounds.Persistencia.Parametros;
 using Bounds.Salesforce;
 using Ging1991.Core.Interfaces;
 using Ging1991.Interfaces.Salida;
+using Ging1991.Musica;
 using Ging1991.Persistencia.Direcciones;
 using Ging1991.Persistencia.Lectores;
 using Ging1991.Persistencia.Proveedores;
@@ -23,7 +24,14 @@ namespace Bounds.Liga {
 		public GameObject oponente2;
 		public GameObject oponente3;
 		public ParametrosControl parametrosControl;
-		public MusicaDeFondo musicaDeFondo;
+
+		private void InicializarMusica(string direccion) {
+			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
+			if (musicaAmbiental.actual != "GENERAL") {
+				musicaAmbiental.Inicializar(new ProveedorAudios(new DireccionRecursos(direccion)));
+				musicaAmbiental.Reproducir("GENERAL");
+			}
+		}
 
 		public Text nombreOBJ;
 		public Configuracion configuracion;
@@ -36,7 +44,8 @@ namespace Bounds.Liga {
 			ParametrosEscena parametros = parametrosControl.parametros;
 			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
 			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
-			musicaDeFondo.Inicializar(parametros.direcciones["MUSICA_TIENDA"]);
+			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
+
 			configuracion = new(parametros.direcciones["CONFIGURACION"]);
 			nombreOBJ.text = proveedorTexto.GetElemento("JUGADOR X").Replace("[JUGADOR]", configuracion.GetNombre());
 			CargarDatos();
