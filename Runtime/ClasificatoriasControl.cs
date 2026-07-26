@@ -1,8 +1,9 @@
 using Bounds.Infraestructura;
 using Bounds.Musica;
 using Bounds.Persistencia;
-using Bounds.Persistencia.Parametros;
 using Bounds.Salesforce;
+using Bounds.Sistema;
+using Bounds.Sistema.Parametros;
 using Ging1991.Core.Interfaces;
 using Ging1991.Interfaces.Salida;
 using Ging1991.Musica;
@@ -23,31 +24,31 @@ namespace Bounds.Liga {
 		public GameObject oponente1;
 		public GameObject oponente2;
 		public GameObject oponente3;
-		public ParametrosControl parametrosControl;
-
-		private void InicializarMusica(string direccion) {
-			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
-			if (musicaAmbiental.actual != "GENERAL") {
-				musicaAmbiental.Inicializar(new ProveedorAudios(new DireccionRecursos(direccion)));
-				musicaAmbiental.Reproducir("GENERAL");
-			}
-		}
-
+		public ControlParametros parametrosControl;
 		public Text nombreOBJ;
-		public Configuracion configuracion;
 		public ControlUIBounds personalizarUI;
 		public CuadroDivision cuadroDivision;
 		private IProveedor<string, string> proveedorTexto;
 
+		private void InicializarMusica(Direccion direccion) {
+			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
+			if (musicaAmbiental.actual != "GENERAL") {
+				musicaAmbiental.Inicializar(new ProveedorAudios(direccion));
+				musicaAmbiental.Reproducir("GENERAL");
+			}
+		}
+
+
 		void Start() {
 			parametrosControl.Inicializar();
-			ParametrosEscena parametros = parametrosControl.parametros;
-			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
-			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
+			ParametrosGlobales parametros = parametrosControl.parametros;
+			if (!RegistroGlobal.Instancia.inicializado)
+				RegistroGlobal.Instancia.Inicializar(parametros);
 			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
 
-			configuracion = new(parametros.direcciones["CONFIGURACION"]);
-			nombreOBJ.text = proveedorTexto.GetElemento("JUGADOR X").Replace("[JUGADOR]", configuracion.GetNombre());
+			personalizarUI.Personalizar(parametros.direccionesGeneradas["SISTEMA"], parametros.direccionesGeneradas["COLORES"]);
+			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["SISTEMA"], TipoLector.RECURSOS);
+			nombreOBJ.text = proveedorTexto.GetElemento("JUGADOR X").Replace("[JUGADOR]", RegistroGlobal.Instancia.configuracion.GetNombre());
 			CargarDatos();
 		}
 
@@ -57,7 +58,7 @@ namespace Bounds.Liga {
 			ServicioTraerDatosDeDivision servicio = new(lector.Leer());
 
 			if (await servicio.AutorizarAsincronico()) {
-				ServicioTraerDatosDeDivision.Puntuacion puntuacion = await servicio.LlamarAsincronica(configuracion.GetNombre());
+				ServicioTraerDatosDeDivision.Puntuacion puntuacion = await servicio.LlamarAsincronica(RegistroGlobal.Instancia.configuracion.GetNombre());
 
 				cuadroDivision.SetDivision(puntuacion.division, proveedorTexto.GetElemento("DIVISION X").Replace("[DIVISION]", puntuacion.division));
 
@@ -75,9 +76,8 @@ namespace Bounds.Liga {
 
 
 		public void Volver() {
-			SceneManager.LoadScene(parametrosControl.parametros.escenaPadre);
+			SceneManager.LoadScene(parametrosControl.parametros.escenaAnterior);
 		}
-
 
 
 		public void BotonJugarPartida() {

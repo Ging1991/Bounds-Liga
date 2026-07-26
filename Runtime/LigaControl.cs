@@ -7,28 +7,28 @@ using Bounds.Salesforce;
 using Ging1991.Salesforce;
 using Ging1991.Persistencia.Direcciones;
 using Bounds.Persistencia;
-using Bounds.Persistencia.Parametros;
 using Bounds.Musica;
 using Bounds.Mazos;
 using Ging1991.Core.Interfaces;
 using Ging1991.Persistencia.Proveedores;
 using Ging1991.Persistencia.Lectores;
 using Ging1991.Musica;
+using Bounds.Sistema;
+using Bounds.Sistema.Parametros;
 
 namespace Bounds.Liga {
 
 	public class LigaControl : MonoBehaviour {
 
 		private ServicioEncontrarOponente.Oponente oponente;
-		public ParametrosControl parametrosControl;
-		public Configuracion configuracion;
+		public ControlParametros parametrosControl;
 		public ControlUIBounds personalizarUI;
 		private IProveedor<string, string> proveedorTexto;
 
-		private void InicializarMusica(string direccion) {
+		private void InicializarMusica(Direccion direccion) {
 			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
 			if (musicaAmbiental.actual != "GENERAL") {
-				musicaAmbiental.Inicializar(new ProveedorAudios(new DireccionRecursos(direccion)));
+				musicaAmbiental.Inicializar(new ProveedorAudios(direccion));
 				musicaAmbiental.Reproducir("GENERAL");
 			}
 		}
@@ -36,12 +36,13 @@ namespace Bounds.Liga {
 
 		void Start() {
 			parametrosControl.Inicializar();
-			ParametrosEscena parametros = parametrosControl.parametros;
-			proveedorTexto = new ProveedorTexto(parametros.direcciones["SISTEMA"], TipoLector.RECURSOS);
-			personalizarUI.Personalizar(parametros.direcciones["SISTEMA"], parametros.direcciones["COLORES"]);
+			ParametrosGlobales parametros = parametrosControl.parametros;
+			if (!RegistroGlobal.Instancia.inicializado)
+				RegistroGlobal.Instancia.Inicializar(parametros);
 			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
 
-			configuracion = new(parametros.direcciones["CONFIGURACION"]);
+			personalizarUI.Personalizar(parametros.direccionesGeneradas["SISTEMA"], parametros.direccionesGeneradas["COLORES"]);
+			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["SISTEMA"], TipoLector.RECURSOS);
 			CargarOponente();
 		}
 
@@ -51,7 +52,7 @@ namespace Bounds.Liga {
 			ServicioEncontrarOponente api = new(lector.Leer());
 
 			if (await api.AutorizarAsincronico()) {
-				oponente = await api.LlamarAsincronica(configuracion.GetNombre());
+				oponente = await api.LlamarAsincronica(RegistroGlobal.Instancia.configuracion.GetNombre());
 				Text cartelTexto = GameObject.Find("Mensaje1").GetComponentInChildren<Text>();
 				cartelTexto.text = proveedorTexto.GetElemento("OPONENTE X").Replace("[OPONENTE]", oponente.nombre);
 				Text cartelTexto2 = GameObject.Find("Mensaje2").GetComponentInChildren<Text>();
@@ -72,7 +73,7 @@ namespace Bounds.Liga {
 			parametros.jugadorLP1 = 4000;
 			parametros.jugadorLP2 = 4000;
 
-			parametros.jugadorNombre1 = configuracion.GetNombre();
+			parametros.jugadorNombre1 = RegistroGlobal.Instancia.configuracion.GetNombre();
 			parametros.jugadorNombre2 = oponente.nombre;
 
 			parametros.jugadorMiniatura1 = "LAUNIX";
@@ -135,7 +136,7 @@ namespace Bounds.Liga {
 
 
 		public void Volver() {
-			SceneManager.LoadScene(parametrosControl.parametros.escenaPadre);
+			SceneManager.LoadScene(parametrosControl.parametros.escenaAnterior);
 		}
 
 
