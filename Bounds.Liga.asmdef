@@ -1,6 +1,6 @@
 {
-	"name": "Bounds.Liga",
-	"rootNamespace": "Bounds.Liga",
+    "name": "Bounds.Liga",
+    "rootNamespace": "Bounds.Liga",
     "references": [
         "Bounds.Cartas",
         "Bounds.Mazos",
@@ -13,24 +13,23 @@
         "Bounds.Entrenamiento",
         "Bounds.Persistencia",
         "Ging1991.Core",
-		"Ging1991.Musica",
-        "Ging1991.Antiguo",
+        "Ging1991.Musica",
         "Ging1991.Dialogos",
         "Ging1991.Salesforce",
         "Ging1991.Relojes",
         "Ging1991.Ventanas",
-        "Ging1991.Movimiento",
         "Ging1991.Animaciones",
         "Ging1991.Interfaces",
-        "Ging1991.Persistencia"
+        "Ging1991.Persistencia",
+        "Ging1991.Idiomas"
     ],
-	"includePlatforms": [],
-	"excludePlatforms": [],
-	"allowUnsafeCode": false,
-	"autoReferenced": true,
-	"overrideReferences": false,
-	"precompiledReferences": [],
-	"defineConstraints": [],
-	"versionDefines": [],
-	"noEngineReferences": false
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

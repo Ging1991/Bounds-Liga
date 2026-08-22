@@ -1,12 +1,9 @@
 using Bounds.Infraestructura;
-using Bounds.Musica;
-using Bounds.Persistencia;
 using Bounds.Salesforce;
 using Bounds.Sistema;
 using Bounds.Sistema.Parametros;
 using Ging1991.Core.Interfaces;
 using Ging1991.Interfaces.Salida;
-using Ging1991.Musica;
 using Ging1991.Persistencia.Direcciones;
 using Ging1991.Persistencia.Lectores;
 using Ging1991.Persistencia.Proveedores;
@@ -19,35 +16,20 @@ namespace Bounds.Liga {
 
 	public class ClasificatoriasControl : MonoBehaviour {
 
+		public ControlBounds controlBounds;
+		private ParametrosGlobales parametros;
 		public GameObject indicadorVictorias;
 		public GameObject indicadorDerrotas;
 		public GameObject oponente1;
 		public GameObject oponente2;
 		public GameObject oponente3;
-		public ControlParametros parametrosControl;
 		public Text nombreOBJ;
-		public ControlUIBounds personalizarUI;
 		public CuadroDivision cuadroDivision;
 		private IProveedor<string, string> proveedorTexto;
 
-		private void InicializarMusica(Direccion direccion) {
-			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
-			if (musicaAmbiental.actual != "GENERAL") {
-				musicaAmbiental.Inicializar(new ProveedorAudios(direccion));
-				musicaAmbiental.Reproducir("GENERAL");
-			}
-		}
-
-
 		void Start() {
-			parametrosControl.Inicializar();
-			ParametrosGlobales parametros = parametrosControl.parametros;
-			if (!RegistroGlobal.Instancia.inicializado)
-				RegistroGlobal.Instancia.Inicializar(parametros);
-			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
-
-			personalizarUI.Personalizar(parametros.direccionesGeneradas["SISTEMA"], parametros.direccionesGeneradas["COLORES"]);
-			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["SISTEMA"], TipoLector.RECURSOS);
+			parametros = controlBounds.InicializarEscena("GENERAL");
+			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["IDIOMA"], TipoLector.RECURSOS);
 			nombreOBJ.text = proveedorTexto.GetElemento("JUGADOR X").Replace("[JUGADOR]", RegistroGlobal.Instancia.configuracion.GetNombre());
 			CargarDatos();
 		}
@@ -76,7 +58,7 @@ namespace Bounds.Liga {
 
 
 		public void Volver() {
-			SceneManager.LoadScene(parametrosControl.parametros.escenaAnterior);
+			SceneManager.LoadScene(parametros.escenaAnterior);
 		}
 
 

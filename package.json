@@ -1,6 +1,6 @@
 {
 	"name": "com.bounds.liga",
-	"version": "1.0.4",
+	"version": "1.2.0",
 	"displayName": "Bounds - Liga",
 	"description": "Librería base para soportar otras liberías que he creado.",
 	"unity": "2022.3",

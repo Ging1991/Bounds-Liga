@@ -6,7 +6,6 @@ using Bounds.Infraestructura;
 using Bounds.Salesforce;
 using Ging1991.Salesforce;
 using Ging1991.Persistencia.Direcciones;
-using Bounds.Persistencia;
 using Bounds.Musica;
 using Bounds.Mazos;
 using Ging1991.Core.Interfaces;
@@ -19,30 +18,15 @@ using Bounds.Sistema.Parametros;
 namespace Bounds.Liga {
 
 	public class LigaControl : MonoBehaviour {
+		public ControlBounds controlBounds;
+		private ParametrosGlobales parametros;
 
 		private ServicioEncontrarOponente.Oponente oponente;
-		public ControlParametros parametrosControl;
-		public ControlUIBounds personalizarUI;
 		private IProveedor<string, string> proveedorTexto;
 
-		private void InicializarMusica(Direccion direccion) {
-			MusicaAmbiental musicaAmbiental = MusicaAmbiental.Instancia;
-			if (musicaAmbiental.actual != "GENERAL") {
-				musicaAmbiental.Inicializar(new ProveedorAudios(direccion));
-				musicaAmbiental.Reproducir("GENERAL");
-			}
-		}
-
-
 		void Start() {
-			parametrosControl.Inicializar();
-			ParametrosGlobales parametros = parametrosControl.parametros;
-			if (!RegistroGlobal.Instancia.inicializado)
-				RegistroGlobal.Instancia.Inicializar(parametros);
-			InicializarMusica(parametros.direcciones["MUSICA_AMBIENTAL"]);
-
-			personalizarUI.Personalizar(parametros.direccionesGeneradas["SISTEMA"], parametros.direccionesGeneradas["COLORES"]);
-			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["SISTEMA"], TipoLector.RECURSOS);
+			parametros = controlBounds.InicializarEscena("GENERAL");
+			proveedorTexto = new ProveedorTexto(parametros.direccionesGeneradas["IDIOMA"], TipoLector.RECURSOS);
 			CargarOponente();
 		}
 
@@ -136,7 +120,7 @@ namespace Bounds.Liga {
 
 
 		public void Volver() {
-			SceneManager.LoadScene(parametrosControl.parametros.escenaAnterior);
+			SceneManager.LoadScene(parametros.escenaAnterior);
 		}
 
 
