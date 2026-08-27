@@ -292,6 +292,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ListaOponentes
       objectReference: {fileID: 0}
+    - target: {fileID: 6879692264001691075, guid: d8963b8949585174482e0b70511de7f1, type: 3}
+      propertyPath: clave
+      value: OPONENTES
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

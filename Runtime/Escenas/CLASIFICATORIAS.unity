@@ -1063,7 +1063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6911881232931684715, guid: c9a48cf125dcebb459c0be11deb4d39b, type: 3}
       propertyPath: clave
-      value: 
+      value: OPONENTES
       objectReference: {fileID: 0}
     - target: {fileID: 6970098764619857335, guid: c9a48cf125dcebb459c0be11deb4d39b, type: 3}
       propertyPath: temaBorde
